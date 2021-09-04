@@ -16,6 +16,8 @@ namespace Domain.Entities
             Email = email;
             Password = password;
             _errors = new List<string>();
+
+            Validate();
         }
         public void ChangeName(string name)
         {
