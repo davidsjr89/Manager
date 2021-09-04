@@ -1,3 +1,6 @@
+using Core.Exceptions;
+using Domain.Validators;
+using System;
 using System.Collections.Generic;
 namespace Domain.Entities
 {
@@ -33,7 +36,17 @@ namespace Domain.Entities
 
         public override bool Validate()
         {
-
+            var validator = new UserValidator();
+            var validation = validator.Validate(this);
+            if (!validation.IsValid)
+            {
+                foreach (var error in validation.Errors)
+                {
+                    _errors.Add(error.ErrorMessage);
+                }
+                throw new DomainException("Alguns campos estão inválidos, por favor corrija-os!",_errors);
+            }
+            return true;
         }
     }
 }
