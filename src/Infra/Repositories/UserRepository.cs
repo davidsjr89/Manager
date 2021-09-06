@@ -25,12 +25,14 @@ namespace Infra.Repositories
 
         public async Task<List<User>> SearchByEmail(string email)
         {
-            return await _context.Users.Where(x => x.Email.ToLower().Contains(email.ToLower())).AsNoTracking().ToListAsync();
+            var user = await _context.Users.Where(x => x.Email.ToLower().Contains(email.ToLower())).AsNoTracking().ToListAsync();
+            return user;
         }
 
         public async Task<List<User>> SearchByName(string name)
         {
-            return await _context.Users.Where(x => x.Name.ToLower().Contains(name.ToLower())).AsNoTracking().ToListAsync();
+            var user =  await _context.Users.Where(x => x.Name.ToLower().Contains(name.ToLower())).AsNoTracking().ToListAsync();
+            return user;
         }
     }
 }

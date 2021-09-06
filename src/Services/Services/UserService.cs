@@ -55,16 +55,16 @@ namespace Services
             var user = await _userRepository.GetByEmail(email);
             return _mapper.Map<UserDTO>(user);
         }
-        public async Task<UserDTO> SearchByEmail(string email)
+        public async Task<List<UserDTO>> SearchByEmail(string email)
         {
             var user = await _userRepository.SearchByEmail(email);
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<List<UserDTO>>(user);
         }
 
-        public async Task<UserDTO> SearchByName(string name)
+        public async Task<List<UserDTO>> SearchByName(string name)
         {
             var user = await _userRepository.SearchByName(name);
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<List<UserDTO>>(user);
         }
 
         public async Task<UserDTO> Update(UserDTO userDTO)
