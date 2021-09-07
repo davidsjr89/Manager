@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core.Exceptions;
 using Domain.Entities;
+using EscNet.Cryptography.Interfaces;
 using Infra.Interfaces;
 using Services.DTO;
 using Services.Interfaces;
@@ -12,12 +13,14 @@ namespace Services
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
+        private readonly IRijndaelCryptography _rijndaelCryptography;
         private readonly IUserRepository _userRepository;
         public UserService(){}
-        public UserService(IMapper mapper, IUserRepository userRepository)
+        public UserService(IMapper mapper, IUserRepository userRepository, IRijndaelCryptography rijndaelCryptography)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _rijndaelCryptography = rijndaelCryptography;
         }
 
         public async Task<UserDTO> Create(UserDTO userDTO)
@@ -28,6 +31,7 @@ namespace Services
 
             var user = _mapper.Map<User>(userDTO);
             user.Validate();
+            user.ChangePassword(_rijndaelCryptography.Encrypt(user.Password));
 
             var userCreated = await _userRepository.Create(user);
 
@@ -75,7 +79,7 @@ namespace Services
 
             var user = _mapper.Map<User>(userDTO);
             user.Validate();
-
+            user.ChangePassword(_rijndaelCryptography.Encrypt(user.Password));
             var userUpdated = await _userRepository.Update(user);
 
             return _mapper.Map<UserDTO>(userUpdated);

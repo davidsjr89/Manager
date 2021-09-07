@@ -3,6 +3,7 @@ using API.Token;
 using API.ViewModels;
 using AutoMapper;
 using Domain.Entities;
+using EscNet.DependencyInjection.IoC.Cryptography;
 using Infra.Context;
 using Infra.Interfaces;
 using Infra.Repositories;
@@ -69,6 +70,7 @@ namespace API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenGenerator, TokenGenerator>();
 
+
             #region Swagger
             services.AddSwaggerGen(c =>
             {
@@ -99,11 +101,15 @@ namespace API
                 }
                 });
             });
+            #endregion
+
+            #region Cryptography
+
+            services.AddRijndaelCryptography(Configuration["Cryptography"]);
 
             #endregion
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
